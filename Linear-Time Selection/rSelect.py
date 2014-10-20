@@ -94,7 +94,7 @@ def rSelect(A, k):
         element being searched for, k.
         Output:  The kth order statistic.
         
-        The wrapper function, quickSort, calls this function with the 
+        The wrapper function, rSelect, calls this function with the 
         appropriate initialization parameters.  rSelect(A, k) passes k-1 as the
         fourth parameter to this internal routine in order to offset for 
         Python's 0-based indexing.  If 0-based indexing is desired for the
