@@ -36,7 +36,7 @@ def rSelect(A, k):
     
     Analysis:
     
-    Note: Randomized Selection (rSelect) uses <= c*n operations outside if the 
+    Note: Randomized Selection (rSelect) uses <= c*n operations outside of the 
     recursive call, for some constant c > 0 (in other words, O(n))
     
     Tracking Progress via Phases:
