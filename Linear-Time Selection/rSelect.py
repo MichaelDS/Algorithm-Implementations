@@ -71,7 +71,7 @@ def rSelect(A, k):
     needed in this case)
     Thus, E[N] = 2
     
-    Recall:  E[Xj <= E[N]
+    Recall:  E[Xj] <= E[N]
     
     Expected running time of rSelect <= E[c*n*SIGMA(phases of j) ((3/4)^j)*Xj]
     = c*n*SIGMA(phases of j) ((3/4)^j)*E[Xj]  <- linearity of expectation
