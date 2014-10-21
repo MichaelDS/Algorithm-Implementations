@@ -12,7 +12,7 @@ def karatsubaMul(x, y):
     x into it's left half digits and right half digits, respectively, and c and 
     d do the same for y.  Thus, x*y = a*c*10^n + (a*d + b*c)*10^(n/2) + b*d.
     
-    a*d + b*d is acquired in a single multiplication using a trick attributed to 
+    a*d + b*c is acquired in a single multiplication using a trick attributed to 
     Carl Gauss;
     
     (a+b)*(c+d) = a*c + a*d + b*c + b*d
