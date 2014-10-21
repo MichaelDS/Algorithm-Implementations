@@ -11,23 +11,23 @@ def countInversions(arr):
     An inversion is defined as a pair of elements in an array A with indices
     (i, j) where i < j and A[i] > A[j].
     
-    A divide an conquer algorithm is used to count the number of inversion in an 
-    array A.  Partitioning A into its two halves, the inversions, (A[i], A[j]), 
-    can be though of as falling into one of three categories:
+    A divide and conquer algorithm is used to count the number of inversions in 
+    an array A.  Partitioning A into its two halves, the inversions, 
+    (A[i], A[j]), can be thought of as falling into one of three categories:
     
     Left Inversion:  i, j <= n/2
     Right Inversion: i, j > n/2
     Split Inversion: i <= n/2 < j
     
-    The number of left inversions and right inversions is acquired recursively. 
-    In addition to counting inversions, the recursion also sorts A via merge
-    sort; this is done so that the number of split inversions can be counted
-    in O(n) time during the merge step.  The algorithm takes advantage of the 
-    fact that, during the merge procedure, each time an element from the right 
-    subarray is added to the merged array the number of inversions with elements
-    of the left subarray that it is involved in  is equal to the number of 
-    elements remaining to be merged from the left subarray.  There are log(n) 
-    levels of recursion, each with a total problem size of n; this, this 
+    The number of left inversions and the number right inversions are acquired 
+    recursively. In addition to counting inversions, the recursion also sorts A 
+    via merge sort; this is done so that the number of split inversions can be 
+    counted in O(n) time during the merge step.  The algorithm takes advantage 
+    of the fact that, during the merge procedure, each time an element from the 
+    right subarray is added to the merged array, the number of inversions with 
+    elements of the left subarray that it is involved in is equal to the number 
+    of elements remaining to be merged from the left subarray.  There are log(n) 
+    levels of recursion, each with a total problem size of n; thus, this 
     algorithm's asymptotic time complexity is O(nlog(n)).  This can be verified 
     by applying the Master Theorem to the recurrence T(n) = 2*T(n/2) + O(n).
     
