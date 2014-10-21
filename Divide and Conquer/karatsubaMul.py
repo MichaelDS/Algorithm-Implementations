@@ -3,7 +3,12 @@
 def karatsubaMul(x, y):
     '''
     My implementation of Karatsuba Multiplication; a subquadratic algorithm for
-    multiplying two n-digit numbers.  Its recurrences can be expressed as
+    multiplying two n-digit numbers.  
+    
+    Input:  Two n-digit numbers, x and y
+    Output: The product of x and y
+        
+    Its recurrences can be expressed as
     T(n) = 3*T(n/2) + O(n); thus, by the Master Theorem, it's asymptotic time 
     complexity is O(n^log2(3)) = (n^1.585).
     
