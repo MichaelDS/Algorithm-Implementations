@@ -6,12 +6,12 @@ def strassenMatMul(x, y):
     multiplication.  
     
     For multiplication of n x n matrices, the input size is defined as n.  
-    Although strassenMatMul does not require that the matrices be square or
-    identical, preprocessing steps pad the matrices with zeros so that all of 
-    their dimensions end up being equal to the largest original dimension or to 
-    the next largest power of 2 if the dimension was not originally a power of 
-    2.  This allows the algorithm to handle multiplicable matrices of arbitrary
-    dimensions.
+    Although strassenMatMul does not require that the matrices be square or of
+    identical dimensions, preprocessing steps pad the matrices with zeros so 
+    that their dimensions end up being equal to the largest original dimension 
+    or to the next largest power of 2 if the dimension was not originally a 
+    power of 2.  This allows the algorithm to handle multiplicable matrices of 
+    arbitrary dimensions.
     
     Input:  Two lists, x and y, that each represent a matrix.  Each list 
     contains a set of lists of equal length that correspond to the rows of the 
@@ -60,12 +60,12 @@ multiplication x * y is defined only if the number of columns in x is equal to \
 the number of rows in y.')
         
     #The following steps, up until the strassen function, enable strassenMatMul 
-    #to handle matrices with arbitrary dimensions; in other words, non-square
-    #matrices, dimensions that are not powers of two, and matrices of 
-    #differing sizes.  If it can be assumed that strassenMatMul will only be
-    #passed square matrices with identical dimensions that are powers of two,
-    #then these preprocessing steps, as well as the post-processing steps for 
-    #removing padded zeroes, are not necessary.
+    #to handle conformable matrices of arbitrary dimensions; in other words, 
+    #non-square matrices, dimensions that are not powers of two, and conformable 
+    #matrices of differing sizes.  If it can be assumed that strassenMatMul will 
+    #only be passed square matrices with identical dimensions that are powers of 
+    #two,then these preprocessing steps, as well as the post-processing steps 
+    #for removing padded zeroes, are not necessary.
     
     resultNRows = x.shape[0]   #saving the inner dimensions for final processing of result matrix
     resultNCols = y.shape[1]

@@ -10,8 +10,8 @@ def closestPair(points):
     
     Input:  A list of tuples that represent the x and y coordinates of a set of 
     n points in R^2.  P = [(x1, y2), (x2, y2), (x3, y3),.....,(xn, yn)]
-    Output: A tuple of the two tuples that represent the the pair of distinct 
-    points p, q in P that minimize d(p, q) over all p, q in P.
+    Output: A tuple of two tuples representing the the pair of distinct points 
+    p*, q* in P that minimize d(p, q) over all p, q in P.
           
     The naive approach takes O(n^2) time.  This is also true of the analogous
     1-D version of the problem of finding the closest pair on a line.  The 1-D 
@@ -22,7 +22,7 @@ def closestPair(points):
     plane is obtained with the following approach:
     
     1. Make a list of the points sorted by x-coordinate, px, and by 
-       y-coordinate, py.  (O(nlog(n)) time.
+       y-coordinate, py.  (O(nlog(n)) time.)
     2. Use divide + conquer:  findClosestPair(px,py)        
         1. Let q = left half of P, R = right half of P.  Form sorted lists of
            the points in these halves, both, by x-coordinate and y-coordinate;
@@ -40,13 +40,21 @@ def closestPair(points):
         6. Return the minimum of (p1, q1), (p2, q2), (p3, q3)
     
     A split pair is defined as a pair of points such that one lies in the left 
-    half of P and the other in the right half.  In order to find the closest
-    split pair, given that there exists a split pair less than d apart, first 
-    partition P into its left and right halfs by defining midx = largest 
-    x-coordinate in the left of P (in q).  (O(1) time)
-    Next, let sy = points of P with x-coordinate in [midx - d, midx + d],
+    half of P and the other in the right half.  The procedure for computing the 
+    closest split pair can be implemented in linear time by imposing the weaker 
+    requirement of only finding the closest split pair in the case where its 
+    distance is less than the distance of the closest non-split pair (d).  
+    
+    In order to find the closest split pair, given that there exists a split 
+    pair less than d apart, first partition P into its left and right halfs by 
+    defining the following: 
+    
+    midx = largest x-coordinate in the left of P (in q).  (O(1) time)
+    
+    sy = points of P with x-coordinate in [midx - d, midx + d],
     sorted by y-coordinate.  (O(n) time by taking advantage of py)
-    Lastly, iterate through sy and for each point compute its Euclidean 
+    
+    Now, iterate through sy and, for each point, compute its Euclidean 
     distance to the 7 subsequent points in sy, or to the last point in sy, 
     whichever is less.  If any of these distances is less than the current 
     minimum distance (d at the start), then store it as the new minimum.  
@@ -55,7 +63,7 @@ def closestPair(points):
     If no eligible split pair was identified, then d(p3, q3) = infinity.
     The closest pair is min{ d(p1, q1), d(p2, q2), d(p3, q3) }.
     
-    Correctness Claim:  Let p = (x1, y1) and q = x2, y2) 
+    Correctness Claim:  Let p = (x1, y1) and q = (x2, y2) 
     be in the left and right half of P, respectively and let them be a split 
     pair with d(p, q) < d.  Then,
     A.  p and q are members of sy
@@ -65,14 +73,29 @@ def closestPair(points):
     closestSplitPair finds it.
     Corollary 2:  Closest pair is correct and runs in O(nlog(n)) time.
     
-    *See notes for proofs of correctness claims.  Essentially, claim A is true
-    because their distance is bound by d; thus, as a split pair, the farthest
-    that either can be from the center(midx) sy is d.  Claim B can be shown to 
-    be true by proving that given 8 d/2 x d/2 boxes centered at midx and with 
-    bottom at min{y1, y2}, all points of sy with y-coordinate between those of 
-    p and q, inclusive, lie in one of the 8 boxes and there is at most one point 
-    in each box because two points in one box would imply a non-split pair with 
-    distance less than d, which contradicts the definition of d.
+    Analysis:
+    Proof of claim A: 
+    The distance between points p and q is less than d.  As a split 
+    pair, the furthest horizontal distance that either point can have from
+    the center (midx) is achieved when the other point lies on midx and both 
+    points have the same y coordinate.  This is upper bounded by d; thus, 
+    claim A is true.
+    
+    Proof of claim B:
+    Consider 8 d/2 x d/2 boxes centered at midx, arranged as follows:
+            
+    [][]|[][]
+    [][]|[][]
+    
+    Assume that the bottom of these boxes is aligned with min{y1, y2}.  Then one
+    of the two points {p, q} lies along the lower edge of one of the boxes and
+    the other point falls into one of the boxes on the other side of midx; thus,
+    all points of sy with y-coordinates between those of p and q, inclusive, lie
+    in one of the 8 boxes.  Additionally, there is at most 1 point in each box
+    because 2 points in one box would constitute a non-split pair with distance
+    less than d, which contradicts the definition of d.  Thus, claim B is true.
+    
+    QED!
     
     This algorithm's asymptotic time complexity can be verified using the 
     Master Method.  Its recurrences can be expressed as T(n) = 2*T(n/2) + O(n);
@@ -81,10 +104,18 @@ def closestPair(points):
     
     from operator import itemgetter
     
-    px = sorted(points, key = itemgetter(0))
+    px = sorted(points, key = itemgetter(0))  #initial sorting of points by x and y coordinates to be passed into the recursive subroutine
     py = sorted(points, key = itemgetter(1))
     
     def findClosestPair(px, py):
+        '''
+        Internal recursive subroutine.
+        
+        Input:  Two lists of tuples, px and py, containing the original set of
+        points sorted by x and y coordinates, respectively. 
+        Output: A tuple of two tuples representing the the pair of distinct points 
+        p*, q* in P that minimize d(p, q) over all p, q in P.    
+        '''
         
         if len(px) == 2:
             return px
@@ -94,8 +125,8 @@ def closestPair(points):
         q = px[:len(px)/2]  #left half of points
         r = px[len(px)/2:]  #right half of points
         
-        print q, r
-        print px
+        #print q, r
+        #print px
         
         qx = q
         rx = r
@@ -116,13 +147,13 @@ def closestPair(points):
             else:
                 ry.append(p)
                 
-        print qy, ry
+        #print qy, ry
         closestLeftPair = findClosestPair(qx, qy)
         closestRightPair = findClosestPair(rx, ry)
         
-        d = min(euclideanDist(closestLeftPair), euclideanDist(closestRightPair))  #helper function implemented at end of script
-        midx = q[-1][0]
-        sy = []
+        d = min(euclideanDist(closestLeftPair), euclideanDist(closestRightPair))  #the minimum distance found between pairs of non-split points
+        midx = q[-1][0]  #store the right-most point among the left half of the points
+        sy = []          #initialize list to contain points with x coordinates that fall within the range (midx - d, midx + d)
         
         for p in py:
             if midx - d < p[0] < midx + d:  #checks if the point's x-coordinate is within boundary
