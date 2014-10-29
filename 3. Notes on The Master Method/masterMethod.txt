@@ -1,0 +1,71 @@
+##### The Master Theorem #####
+
+Assumption:  All subproblems are of the same size; there exist more general versions of the Master Method for dealing with special cases involving assymetric recursive calls
+
+a = The number of recursive calls
+b = the factor by which the input to each recursive call has been divided
+d = exponent of the running time in the "combine step"
+
+Base Case: T(1) <= A constant
+
+For all larger n:
+If T(n) <= a*T(n/b) + O(n^d), then 
+
+T(n) = O(n^d * log(n))  if a = b^d  (Case 1)
+T(n) = O(n^d)           if a < b^d  (Case 2)
+T(n) = O(n^logb(a))     if a > b^d  (Case 3)
+
+### Proof of The Master Theorem: Recursion Tree Approach ###
+
+Total work <= a^j * SIGMA(j = 0, to logb(n)) c*[n/b^j]^d  # j is the level of recursion
+							  # there are logb(n) + 1 levels (the + 1 being the root)
+
+Work at level j <= a^j * c*[n/b^j]^d  # There are a^j subproblems at level j of the recursion
+			 	      # The subproblems are of size [n/b^j] at level j of the recursion
+			   	      # The work done outisde of the recursion has some constant factor, c, and some exponent, d
+
+Work at level j <= c*n^d * [a/b^d]^j  # Note that b^d measures how much less work is done by the resursive call whereas b just measures how much smaller the input is
+			 	      # [a/b^d] -> (rate of subproblem proliferation) / (rate of work shrinkage) = (RSP)/(RWS)
+				      # If RSP < RWS, the amount of work is decreasing with the recursion level j; work dominated by root, expect O(n^d)
+				      # If RSP > RWS, the amount of work is increasing with the recursion level j; work dominated by leaves, expect O(#leaves in the tree)
+				      # If RSP = RWS, the amount of work is the same at every recursion level j; work equal across levels, expect O(n^d * log(n))
+
+Proving each case:
+
+Total work <= c*n^d * SIGMA(j = 0, to logb(n)) [a/b^d]^j
+
+Case 1: a = b^d
+
+Total work <= c*n^d * SIGMA(j = 0, to logb(n)) [1]^d
+	    = c*n^d*(logb(n) + 1)
+	    = O(n^d * log(n))      # log base can be suppressed because logs of different bases differ by a constant factor
+
+*End Case 1*
+
+Important note:
+Recall geometric series; when summing up powers if a constant r, if |r| > 1, then the largest power of r dominates the sum
+                                                                 if |r| < 1, then the sum is a constant 
+Case 2: a < b^d
+
+[a/b^d] < 1; thus, 
+Total work <= c*n^d * a constant
+
+= O(n^d)
+
+*End Case 2*
+
+Case 3: a > b^d
+
+[a/b^d] > 1; thus,
+Total work = O(n^d * (the largest power of [a/b^d] in the sum)
+	   = O(n^d * [a/b^d]^logb(n)
+
+Note:  b^(-d*logb(n)) = (b^logb(n))^-d = n^-d
+
+Thus, Total work = O(a^logb(n))  # a^logb(n) is the number of leaves in the recursion tree
+
+Note: a^logb(n) = n^logb(a)
+
+*End Case 3*
+
+QED!

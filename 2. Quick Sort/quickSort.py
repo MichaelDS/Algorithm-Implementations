@@ -151,7 +151,7 @@ def quickSort(A):
         switchFlag = False                      ##flag to be used to handle duplicate pivot values
         i = left                                #initialize pointer to shadow the division between the <p and >p partitions
         for j in range(left+1, right):         #j is a pointer to the next unexamined element; it separates the <p and >p partitions from the unexamined partition
-            if A[j] == A[left]:                ##check if the next unexamined value is equal to the pivot; of this happens more than once, there are some number of duplicate pivot values
+            if A[j] == A[left]:                ##check if the next unexamined value is equal to the pivot; if this happens more than once, there are some number of duplicate pivot values
                 if not switchFlag:
                     switchFlag = True          ##alternating switchFlag ensures that duplicate pivot values are split evenly
                 else:
