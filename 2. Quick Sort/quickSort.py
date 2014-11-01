@@ -6,16 +6,16 @@ def quickSort(A):
     selection and in-place sorting.
     
     Input:  A list of comparable elements
-    Output: The list in sorted order
+    Output: No output
     Note:  It is not necessary to return the sorted list in this implementation
-    because the list is sorted in place.  It is returned here for ease of 
-    testing.
+    because the list is sorted in place.  
     
     The Quick Sort algorithm sorts an array of elements, A, by partitioning them
     around a selected pivot such that all elements to the left of the pivot are
     less than the pivot (<p partition) and all elements to the right of the
-    pivot are greater than the pivot (>p partition).  The two partitions are
-    then sorted recursively.
+    pivot are greater than the pivot (>p partition).  Once this is done, the 
+    pivot element will be in its rightful sorted position.  The two partitions 
+    are then sorted recursively.
     
     The choice of pivot is made uniformly at random.  Correct partitioning 
     around the pivot can be achieved in O(n) time by using the following 
@@ -42,18 +42,17 @@ def quickSort(A):
     are recursively sorting.
     
     Quicksort Theorem:
-    For every input array of length n, the average running time of Quck Sort
+    For every input array of length n, the average running time of Quick Sort
     (with uniformly random pivots) is O(nlog(n)). 
-    -Holds for every input (no assumptions on the data)
-    -"Average" is over random pivot choices made by the algorithm
+    - Holds for every input (no assumptions on the data)
+    - "Average" is over random pivot choices made by the algorithm
     
     Intution:
     Always getting pivots which produce a 25-75 split or better is good enough
     to produce an O(nlog(n)) running time.  This can be proven via recursion
     tree.
     
-    Analysis:
-        
+    Analysis: 
     Proof of the Quick Sort Theorem:
         
         Fix an input of array A of length n.  
@@ -78,15 +77,15 @@ def quickSort(A):
         
         Two elements of the input array can be compare at most 1 time because 
         two elements are compared only when one is the pivot, which is excluded 
-        recursive calls.  If an element with a value in between the values of
-        the two elements is chosen as the pivot, then those two values will 
-        never be compared because they are sent into separate recursions of
-        Quick Sort.  Thus, Xij is an indicator random variable 
-        (takes on value 0 or 1).
+        in subsequent recursive calls.  If an element with a value in between 
+        the values of the two elements is chosen as the pivot, then those two 
+        values will never be compared because they are sent into separate 
+        recursions of Quick Sort.  
+        Thus, Xij is an indicator random variable (takes on value 0 or 1).
         
         Then, for all s, C(s) = SIGMA(i to n-1)SIGMA(j=i+1 to n) Xij(s) 
         
-        Thus, by linearity of expectation, 
+        By linearity of expectation, 
         E[C] = SIGMA(i to n-1)SIGMA(j=i+1 to n) E[Xij]  <-Much simpler than E[C]
         
         E[Xij] = 0*P[Xij = 0] + 1*P[Xij = 1] = P[Xij = 1]
@@ -99,7 +98,7 @@ def quickSort(A):
         passed to the same recursive call.  Consider the first among zi,..., zj
         that gets chosen as a pivot.  If zi or zj gets chosen first, then zi and
         zj get compared.  If one of the zi+1,..., zj-1 gets chosen first, then 
-        zi and zj are never compared as they are split into difference recursive
+        zi and zj are never compared as they are split into different recursive
         calls. 
         
         Thus, P[zi, zj get compared] = 2/(j - i + 1); in words, 2 divided by
@@ -109,8 +108,8 @@ def quickSort(A):
         
         E[C] = 2*SIGMA(i to n-1)SIGMA(j=i+1 to n) 1/(j - i + 1)
         
-        For each fixed i, the inner sum is -
-        SIGMA(j=i+1 to n) 1/(j - i + 1) = 1/2 + 1/3 + 1/4 + ...
+        For each fixed i, the inner sum across values of j is -
+        SIGMA(j=i+1 to n) 1/(j - i + 1) = 1/2 + 1/3 + 1/4 + ... + 1/n
         and there are O(n) choices for i.
         
         So, E[C] <= 2 * n * SIGMA(k=2 to n) 1/k
@@ -169,7 +168,5 @@ def quickSort(A):
 
         qSort(A, left, i)                      #recurse on the array itself; uses pointers to the <p and >p partitions to sort in place so no return is necessary
         qSort(A, i+1, right)                   #avoid including the pivot in the recursion
-
-        return A                              #return the sorted array
         
-    return qSort(A, 0, len(A))
+    qSort(A, 0, len(A))                        #call to qSort with initial boundary pointers; sorts the list in place
