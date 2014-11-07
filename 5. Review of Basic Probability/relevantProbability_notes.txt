@@ -1,0 +1,71 @@
+##### Refresher on Relevant Probability #####
+
+##### Sample Spaces #####
+
+Sample Space S = All possible outcomes
+(in algorithms, S is usually finite)
+
+Each outcome i in S has a probability p(i) >= 0
+
+Constraint:  SIGMA(i in S) p(i) = 1
+
+##### Events #####
+
+Event = a subset s <= S
+
+The probability of an event s is SIGMA(i in s) p(i)
+
+##### Random Variables #####
+
+Random variable X is a real-valued function X: S -> R
+
+##### Expectation #####
+
+Let X: S -> R be a random variable.
+
+The expectation E[X] = average value of X = SIGMA(i in S) X(i)*p(i)
+
+##### Linearity of Expectation #####
+
+
+Let X1, ..., Xn be random variables defined on S.
+
+Then: E[SIGMA(j = 1, n) Xj] = SIGMA(j = 1, n) E[Xj]
+
+Crucially:  Holds even when Xj's are not independent.  (Would be false if replace sums with products)
+
+Proof: SIGMA(j = 1, n) E[Xj] = SIGMA(j = 1, n)SIGMA(i in S) Xj(i)*p(i)
+                             = SIGMA(i in S)SIGMA(j = 1, n) Xj(i)*p(i)
+			     = SIGMA(i in S) p(i) * (SIGMA(j = 1, n) Xj(i))
+		             = E[SIGMA(j = 1, n) Xj(i)]
+QED!
+
+
+##### Conditional Probability #####
+
+Let X, Y in S be events
+
+Then P[X|Y] = P[intersection(X, Y)]/P[Y]
+
+##### Independence (of events) #####
+
+Definition: Events X, Y in S are independent if and only if P[intersection(X, Y)] = P[X]*P[Y]
+
+This holds if and only if P[X|Y] = P[X], and P[Y|X] = P[Y]  (Consequence of independence)
+
+Warning: Can be a very subtle concept.  Intuition is often incorrect.  Use the formal definition as much as possible.
+
+Definition: Random variables A, B (both defined on S) are independent <=> the events P[A = a], P[B = b] are independent for all a, b.  (<=> P[A = a and B = b] = P[A = a]*P[B = b])
+
+Claim: if A, B are independent, the E[A*B] = E[A]*E[B]
+Proof: E[A*B] = SIGMA((a,b)) (a*b) * P[A = a and B = b]
+       = SIGMA((a,b)) (a*b) * P[A = a] * P[B = b] (Since A and B are independent)
+       = (SIGMA((a)) a * P[A = a]) * (SIGMA((b)) b * P[B = b])
+              = E[A] * E[B]
+QED!
+
+##### General Formulas for Probabilities of Unions and Intersections of Events #####
+
+P[union(A, B)] = P[A] + P[B] - P[intersection(A, B)]
+
+P[intersection(A, B)] = P[A] * P[B|A]
