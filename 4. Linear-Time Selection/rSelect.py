@@ -44,7 +44,7 @@ def rSelect(A, k):
     Notation:  rSelect is in phase j if the size of the current array being 
     searched is between ((3/4)^(j+1))*n and ((3/4)^j)*n
     - Higher numbers of j indicate more progress has been made
-    - The phase number j quantifies the number of times 75% progress has been 
+    - The phase number j quantifies the number of times 25% progress has been 
     made relative to the original input array
     - Xj = number of recursive calls during phase j <--random variable, depends 
     on random pivot choices
@@ -53,6 +53,7 @@ def rSelect(A, k):
     - Xj is the number of phase-j subproblems
     - ((3/4)^j)*n is an upper bound on the array size during phase j
     - c*((3/4)^j)*n is the amount of work per phase-j subproblem
+    - c is inherited from the partition step which performs <= c*n operations
     
     Note:  If rSelect chooses a pivot give a 25-75 split or better, then the
     current phase ends (the subarray sent into the recursion will have a length
@@ -137,7 +138,7 @@ def rSelect(A, k):
                                               
         elif i > k:                           #if the pivot is greater than the kth order element, recurse on the left side of the array itself 
             return randomizedSelection(A, left, i, k)
-        else:                                 #if the pivot is smaller than the kth order element, recurse on the right side of the array itself
+        else:                                 #if the pivot is smaller than the kth order element, recurse on the right side of the array itself; not using k - i as 4th parameter because selection is happening in-place, thus, indeces are preserved
             return randomizedSelection(A, i+1, right, k)
             
             

@@ -83,10 +83,10 @@ def dSelect(A, k):
     
     Guess:  There is some constant a (independent of n) such that T(n) <= a*n
     for all n >= 1.  (If this is true, the T(n) = O(n) and the algorithm is 
-    linear-time.
+    linear-time.)
     
     Claim:  Let a = 10*c, then T(n) <= a*n for all n >= 1 
-    (the 10 is reverse-engineered)
+    (the 10 would normally be reverse-engineered from induction)
     
     Proof (by induction on n):
         
@@ -97,7 +97,7 @@ def dSelect(A, k):
         <= c*n + a*(n/5) + a*(7*n/10)             (inductive hypothesis)
         = n*(c + 9*a/10) = a*n = O(n)             (choice of a)
         
-        QED!
+    QED!
     '''
     
     assert 1 <= k <= len(A)  #Ensure that k makes sense for an array of length len(A)
