@@ -11,7 +11,7 @@ def kargerMinCut(g, reps, updateLabels = False):
     chance of failure, where n is the number of nodes in the graph
     '''
     #n = g.countNodes()
-    #reps = n**2 * math.log(n)  # this many repetitions of the contraction algorithm will upper bound the probability of failure by 1/n
+    #reps = n**2 * math.log(n)  # this many repetitions of the contraction algorithm will upper bound the probability of failure by 1/n; very long run time
     minCut = float('inf')
     for i in range(int(math.ceil(reps))):
         print('Iteration ' + str(i + 1))
