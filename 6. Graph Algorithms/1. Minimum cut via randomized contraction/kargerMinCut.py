@@ -49,7 +49,7 @@ def rContract(g):
 def rContract2(g):
     '''
     Input:  An undirected graph
-    Output: The graph after contracting to 2 nodes
+    Output: The graph after contracting to 2 nodes with updated labels
     '''
     
     while g.countNodes() > 2:
