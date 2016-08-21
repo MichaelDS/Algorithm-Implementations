@@ -86,7 +86,7 @@ class Digraph(object):
     def removeEdge(self, edge):
         src = edge.getSource()
         dest = edge.getDestination()
-        if not(src in self.edges.keys() and dest in self.edges[src]):
+        if not(src in list(self.edges.keys()) and dest in self.edges[src]):
             raise ValueError('Edge not in graph')
         self.edges[src].remove(dest)
     def removeUndirectedEdge(self, edge):

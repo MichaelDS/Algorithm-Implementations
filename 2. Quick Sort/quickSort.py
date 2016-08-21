@@ -143,7 +143,7 @@ def quickSort(A):
         if left == right:
             return A
         
-        p = random.choice(range(left, right))    #randomized selection of pivot index
+        p = random.choice(list(range(left, right)))    #randomized selection of pivot index
 
         A[left], A[p] = A[p], A[left]           #swap the pivot into the first position
 

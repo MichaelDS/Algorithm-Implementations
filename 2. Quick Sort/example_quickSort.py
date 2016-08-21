@@ -21,7 +21,7 @@ def example_quickSort(A):
     if len(A) == 0:
         return A
     
-    p = random.choice(range(len(A)))     #randomized selection of pivot index
+    p = random.choice(list(range(len(A))))     #randomized selection of pivot index
 
     A[0], A[p] = A[p], A[0]              #swap the pivot into the first position
 

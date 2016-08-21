@@ -14,12 +14,12 @@ def kargerMinCut(g, reps, updateLabels = False):
     #reps = n**2 * math.log(n)  # this many repetitions of the contraction algorithm will upper bound the probability of failure by 1/n; very long run time
     minCut = float('inf')
     for i in range(int(math.ceil(reps))):
-        print('Iteration ' + str(i + 1))
+        print(('Iteration ' + str(i + 1)))
         if not updateLabels:
             gContracted = rContract(copy.deepcopy(g))  # pass a copy of the graph to the contraction algorithm in order to avoid modifying the original;
         else:
             gContracted = rContract2(copy.deepcopy(g)) # if specified, use rContract2 to re-label the nodes appropriately; significantly longer running time
-        key = gContracted.edges.keys()[0]         # pick one of the two nodes in the contracted graph
+        key = list(gContracted.edges.keys())[0]         # pick one of the two nodes in the contracted graph
         if len(gContracted.edges[key]) < minCut:
             minCut = len(gContracted.edges[key])  # if the number of edges between the two nodes is less than the minCut found so far, then replace the current minCut
     return minCut
@@ -95,7 +95,7 @@ def load_graph(filename):
         a directed graph representing the map
     """
     
-    print "Loading map from file..."
+    print("Loading map from file...")
     
     f = open(filename)
     data = f.read().split('\n')

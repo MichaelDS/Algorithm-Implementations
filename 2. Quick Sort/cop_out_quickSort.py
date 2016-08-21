@@ -18,7 +18,7 @@ def cop_out_quickSort(A):
     if len(A) == 0:
         return A
     
-    p = random.choice(range(len(A)))     #randomized selection of pivot index
+    p = random.choice(list(range(len(A))))     #randomized selection of pivot index
     
     ALeft = []                           #initialize ALeft which will contain the <p partition
     ARight = []                          #initialize ARight which will contain the >p partition
