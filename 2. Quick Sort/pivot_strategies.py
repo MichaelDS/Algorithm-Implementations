@@ -1,10 +1,35 @@
 # Michael D. Salerno
 
+
 def quickSort_first_element(A):
+    '''
+    My implementation of the Quick Sort algorithm with in-place sorting and
+    a pivot selection strategy that always choose the first element as the
+    pivot.  Also computes and returns the number of comparisons made by the
+    quicksort algorithm.  The comparisons are not counted one-by-one. Rather,
+    when there is a recursive call on a subarray of length m, m − 1  is added
+    to a running total of comparisons. (This is because the pivot element is
+    compared to each of the other m − 1 elements in the subarray in this
+    recursive call.)
 
+    Input:  A list of comparable elements
+    Output: The number of comparisons made by the quicksort algorithm.
+    Note:  The list is sorted in place.  The number of comparisons made by the
+    quicksort algorithm is returned in order to analyze its running time given
+    this strategy for choosing pivots.
+    '''
     def qSort(A, left, right):
+        '''
+        Internal routine containing the implementation of Quick Sort.
 
-        import random
+        Input:  A list, A, and indices, left and right,  indicating the
+        boundaries of the partition to be processed.  Note that the right-most
+        index of the list, A, is (right - 1).  "right" is passed a value that
+        is one greater than the maximum index of A.  On the initial call, it is
+        passed the length of array A.
+        Output: The number of comparisons made in this call to the partitioning
+        procedure.
+        '''
 
         if left == right:
             return 0
@@ -39,10 +64,34 @@ def quickSort_first_element(A):
     return qSort(A, 0, len(A))                        #call to qSort with initial boundary pointers; sorts the list in place
 
 def quickSort_last_element(A):
+    '''
+    My implementation of the Quick Sort algorithm with in-place sorting and
+    a pivot selection strategy that always choose the last element as the
+    pivot.  Also computes and returns the number of comparisons made by the
+    quicksort algorithm.  The comparisons are not counted one-by-one. Rather,
+    when there is a recursive call on a subarray of length m, m − 1  is added
+    to a running total of comparisons. (This is because the pivot element is
+    compared to each of the other m − 1 elements in the subarray in this
+    recursive call.)
 
+    Input:  A list of comparable elements
+    Output: The number of comparisons made by the quicksort algorithm.
+    Note:  The list is sorted in place.  The number of comparisons made by the
+    quicksort algorithm is returned in order to analyze its running time given
+    this strategy for choosing pivots.
+    '''
     def qSort(A, left, right):
+        '''
+        Internal routine containing the implementation of Quick Sort.
 
-        import random
+        Input:  A list, A, and indices, left and right,  indicating the
+        boundaries of the partition to be processed.  Note that the right-most
+        index of the list, A, is (right - 1).  "right" is passed a value that
+        is one greater than the maximum index of A.  On the initial call, it is
+        passed the length of array A.
+        Output: The number of comparisons made in this call to the partitioning
+        procedure.
+        '''
 
         if left == right:
             return 0
@@ -77,10 +126,36 @@ def quickSort_last_element(A):
     return qSort(A, 0, len(A))                        #call to qSort with initial boundary pointers; sorts the list in place
 
 def quickSort_median_of_three(A):
+    '''
+    My implementation of the Quick Sort algorithm with in-place sorting and
+    the median-of-three pivot selection strategy.  The pivot is chosen by
+    selecting the median of the left-most, right-most, and middle element of
+    the subarray being partitioned.  Also computes and returns the number of
+    comparisons made by the quicksort algorithm.  The comparisons are not
+    counted one-by-one. Rather, when there is a recursive call on a subarray of
+    length m, m − 1  is added to a running total of comparisons.
+    (This is because the pivot element is compared to each of the other m − 1
+    elements in the subarray in this recursive call.)
 
+    Input:  A list of comparable elements
+    Output: The number of comparisons made by the quicksort algorithm.
+    Note:  The list is sorted in place.  The number of comparisons made by the
+    quicksort algorithm is returned in order to analyze its running time given
+    this strategy for choosing pivots.
+    '''
     def qSort(A, left, right):
+        '''
+        Internal routine containing the implementation of Quick Sort.
 
-        import random, math
+        Input:  A list, A, and indices, left and right,  indicating the
+        boundaries of the partition to be processed.  Note that the right-most
+        index of the list, A, is (right - 1).  "right" is passed a value that
+        is one greater than the maximum index of A.  On the initial call, it is
+        passed the length of array A.
+        Output: The number of comparisons made in this call to the partitioning
+        procedure.
+        '''
+        import math
 
         if left == right:
             return 0
