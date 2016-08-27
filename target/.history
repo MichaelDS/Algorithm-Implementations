@@ -1,5 +1,0 @@
-quit()
-exit()
-scala-version
-scalaVersion
-scalaVersion := 2.11.8
