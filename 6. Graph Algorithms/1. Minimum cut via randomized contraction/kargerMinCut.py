@@ -1,5 +1,5 @@
-# Import everything from `graph.py` 
-from graph import * 
+# Import everything from `graph.py`
+from graph import *
 import random, math, copy
 
 def kargerMinCut(g, reps, updateLabels = False):
@@ -7,7 +7,7 @@ def kargerMinCut(g, reps, updateLabels = False):
     Input:  An undirected graph, the number of repetitions for which to run
     the contraction algorithm, and and optional flag indicating whether or not
     to re-label the contracted graph.
-    Output: The min-cut (the minimum number of crossing edges) with O(1/n) 
+    Output: The min-cut (the minimum number of crossing edges) with O(1/n)
     chance of failure, where n is the number of nodes in the graph
     '''
     #n = g.countNodes()
@@ -23,13 +23,13 @@ def kargerMinCut(g, reps, updateLabels = False):
         if len(gContracted.edges[key]) < minCut:
             minCut = len(gContracted.edges[key])  # if the number of edges between the two nodes is less than the minCut found so far, then replace the current minCut
     return minCut
-    
+
 def rContract(g):
     '''
     Input:  An undirected graph
     Output: The graph after contracting to 2 nodes
     '''
-    
+
     while g.countNodes() > 2:
         edges = g.__str__().split()              # list every edge
         pick = random.choice(edges).split('->')  # pick one edge at random, split into [v1, v2]
@@ -41,17 +41,17 @@ def rContract(g):
             cEdge = Edge(cNode, v)
             g.removeUndirectedEdge(cEdge)        # remove edges attached to the node being contracted
             if v != aNode:                       # the contracted edge and any edges parallel to it do not need to be re-inserted into the graph
-                newEdge = Edge(aNode, v)    
+                newEdge = Edge(aNode, v)
                 g.addUndirectedEdge(newEdge)     # re-insert other deleted edges such that they originate from the merged node
         g.removeNode(cNode)                      # remove the contracted node
     return g
-    
+
 def rContract2(g):
     '''
     Input:  An undirected graph
     Output: The graph after contracting to 2 nodes with updated labels
     '''
-    
+
     while g.countNodes() > 2:
         edges = g.__str__().split()              # list every edge
         pick = random.choice(edges).split('->')  # pick one edge at random, split into [v1, v2]
@@ -70,21 +70,21 @@ def rContract2(g):
             cEdge = Edge(cNode, v)
             g.removeUndirectedEdge(cEdge)        # remove edges attached to the node being contracted
             if v != mNode:                       # the contracted edge and any edges parallel to it do not need to be re-inserted into the graph
-                newEdge = Edge(mNode, v)    
+                newEdge = Edge(mNode, v)
                 g.addUndirectedEdge(newEdge)     # re-insert other deleted edges such that they originate from the merged node
         g.removeNode(cNode)                      # remove the contracted node
     return g
-              
-              
+
+
 def load_graph(filename):
-    """ 
+    """
     Parses the map file and constructs an undirected graph
 
-    Parameters: 
+    Parameters:
         mapFilename : name of the map file
 
     Assumes:
-        Each entry in the map file consists of the following four positive 
+        Each entry in the map file consists of the following four positive
         integers, separated by a blank space:
             From To TotalDistance DistanceOutdoors
         e.g.
@@ -94,13 +94,13 @@ def load_graph(filename):
     Returns:
         a directed graph representing the map
     """
-    
-    print("Loading map from file...")
-    
+
+    print("Loading graph from file...")
+
     f = open(filename)
     data = f.read().split('\n')
     g = Digraph()   # Although the graph is undirected, kargerMinCut.txt is an adjancency list, so it is more convenient to construct using Digraph() instead of Graph()
-    
+
     for line in data:
         values = line.split()
         if len(values) != 0:       # last line in kargerMinCut.txt is an empty string
@@ -108,7 +108,7 @@ def load_graph(filename):
             try:
                 g.addNode(src)
             except ValueError:
-                pass     
+                pass
             for d in values[1:]:
                 dest = Node(d)
                 try:
@@ -116,7 +116,5 @@ def load_graph(filename):
                 except ValueError:
                     pass
                 e = Edge(src, dest)
-                g.addEdge(e)            
+                g.addEdge(e)
     return g
-    
-
