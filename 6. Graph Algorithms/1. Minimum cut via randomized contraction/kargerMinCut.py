@@ -8,6 +8,26 @@ import copy
 
 def kargerMinCut(g, reps=float('inf')):
     '''
+    My implementation of Karger's randomized O(n^2 * m) algorithm for computing
+    a minimum cut (that is, a cut with the fewest number of crossing edges) of
+    an undirected graph.
+
+    Input:  An undirected graph as defined in my graph.py script
+    (parallel edges allowed) and the number of trials of Karger's contraction
+    algorithm to run.
+    Output: A tuple containing the size of the best cut discovered during the
+    repeated trials and a two-node graph representation of the graph after this
+    cut is applied.
+
+    The contraction algorithm has a low success probability, lower bounded by
+    1/n^2, however, it can be repeated for an arbitrary number of independent
+    trials in order to increase the probability that a minimum cut is
+    discovered.
+
+    If the "reps" argument is left unspecified, then the contraction algorithm
+    is run n^2 * log(n) times, which upper bounds the probability of failure by
+    1/n.  This can take a very long time and, for the example data provided
+    here, a much smaller of repetitions appeared to be sufficient.
     '''
     if reps == float('inf'):
         n = g.countNodes()
@@ -27,6 +47,12 @@ def kargerMinCut(g, reps=float('inf')):
 
 def rContract(g):
     '''
+    Sub-procedure containing Karger's randomized contraction algorithm.
+
+    Input:  An undirected graph as defined in my graph.py script
+    (parallel edges allowed)
+    Output:  A two-node graph representation of the original graph after
+    repeated random contractions.
     '''
     while g.countNodes() > 2:
         edges = g.__str__().split()                # list every edge
