@@ -3,7 +3,6 @@ from math import floor
 class heap(object):
     '''
     A heap.
-    #TODO: Modularize bubbling
     '''
     def __init__(self):
         self.elements = []
