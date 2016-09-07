@@ -47,9 +47,9 @@ class WeightedEdge(Edge):
         return '{0}->{1} ({2})'.format(self.src, self.dest, self.weight)
 
 class Digraph(object):
-    """
+    '''
     A directed graph
-    """
+    '''
     def __init__(self):
         # A Python Set is basically a list that doesn't allow duplicates
         # Entries into a set must be hashable
@@ -127,7 +127,7 @@ class Digraph(object):
         explored = set()          # keeps track of explored nodes
         t = 0                     # keeps track of finishing times (1st pass)
         s = None                  # keeps track of leader node (2nd pass)
-        
+
 # This recursive version of dfs appears to work correctly, however, on larger
 # graphs it causes a maximum recursion depth error because Python does
 # not support tail recursion.  For this reason, I implemented an iterative
@@ -188,8 +188,8 @@ class Digraph(object):
                     scc[s] = []
                     dfs(edges, v)
         dfs_loop(g_rev, preprocessing = True)   # 1st pass
-        scc = {}
-        explored = set()
+        scc = {}                   # reset scc(leader) mapping for 2nd pass
+        explored = set()           # reset explored nodes for 2nd pass
         dfs_loop(self.edges)                    # 2nd pass
         return scc
     def __str__(self):
