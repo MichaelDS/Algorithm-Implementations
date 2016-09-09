@@ -2,7 +2,6 @@
 
 from queue import Queue
 import sys
-sys.setrecursionlimit(1000000)
 
 class Node(object):
     def __init__(self, name):
@@ -234,6 +233,8 @@ class Graph(Digraph):
     '''
     An undirected graph; special instance of a digraph
     '''
+    def __init__(self):
+        Digraph.__init__(self)
     def addEdge(self, edge):
         Digraph.addUndirectedEdge(self, edge)
     def removeEdge(self, edge):
