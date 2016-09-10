@@ -23,7 +23,7 @@ class Heap(object):
             return self.elements[parent-1] >= self.elements[child-1]
     def select_child(self, left, right, max_heap = False):
         '''
-        This method is customized for use within the main while-loop of the
+        This method is designed for use within the main while-loop of the
         bubble_down() function.  Use elsewhere cautiously.
         '''
         if right > self.size():
