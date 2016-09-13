@@ -50,6 +50,6 @@ def load_graph(filename):
     return g
 
 g = load_graph('dijkstraData.txt')
-distances = g.shortest_paths(Node(1))
+distances = g.shortest_paths(Node(1))  # compute all geodesics originating at node 1
 nodes = [Node(i) for i in [7, 37, 59, 82, 99, 115, 133, 165, 188, 197]]
 print([distances[d] for d in nodes])
