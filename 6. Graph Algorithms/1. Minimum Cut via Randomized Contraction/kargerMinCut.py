@@ -60,7 +60,7 @@ def rContract(g):
         random.shuffle(choice)                     # shuffle order nodes
         aNode = Node(choice[0])                    # set absorbing node
         cNode = Node(choice[1])                    # set node to contract
-        mNode = Node('(' + choice[0] + ',' + choice[1] + ')')  # new node representing the merged node
+        mNode = Node(choice[0] + ',' + choice[1])  # new node representing the merged node
         g.addNode(mNode)                           # add supernode to graph
         transferNodes = g.childrenOf(aNode)        # list of aNode's neighbors
         for v in transferNodes:                    # transfer all of aNodes edges to the supernode mNode
@@ -124,3 +124,9 @@ def load_graph(filename):
                 e = Edge(src, dest)
                 g.addEdge(e)
     return g
+
+random.seed(1)
+g = load_graph('kargerMinCut.txt')
+cut = kargerMinCut(g, 15)
+nodes = [n.getName() for n in cut[1].nodes] # supernode labels consist of the labels of all absorbed nodes
+num_edges = cut[0]                          # number of edges crossing the computed min-cut
