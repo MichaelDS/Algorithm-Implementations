@@ -1,7 +1,9 @@
 # A set of data structures to represent graphs
 
 from queue import Queue
+from heap import MinHeap
 import sys
+
 
 class Node(object):
     def __init__(self, name):
@@ -20,6 +22,7 @@ class Node(object):
         # Override the default hash method; simplifies use of dictionary
         return self.name.__hash__()
 
+
 class Edge(object):
     def __init__(self, src, dest):  # src and dest should be nodes
         self.src = src
@@ -31,19 +34,19 @@ class Edge(object):
     def __str__(self):
         return '{0}->{1}'.format(self.src, self.dest)
 
+
 class WeightedEdge(Edge):
     '''
     Subclass of edge; supports for context-specific edge weights.
     '''
     def __init__(self, src, dest, weight):  # src and dest should be nodes
-        Edge.__init__(self, src, dest, weight)
+        Edge.__init__(self, src, dest)
         self.weight = float(weight)
-
     def getWeight(self):
         return self.weight
-
     def __str__(self):
         return '{0}->{1} ({2})'.format(self.src, self.dest, self.weight)
+
 
 class Digraph(object):
     '''
@@ -67,11 +70,10 @@ class Digraph(object):
     def removeNode(self, node):
         if node not in self.nodes:
             raise ValueError('Node not in graph')
-        children = self.childrenOf(node)
         self.nodes.remove(node)                        # remove from set of nodes
         self.edges.pop(node)                           # remove as a key from the edges hashtable
-        for v in children:                             # remove as a value from the edges hashtable
-            self.edges[v] = [n for n in self.edges[v] if n != node]  # can this be optimized?  Consider directed vs undirected cases.  Case for: parallel  edges
+        for src in self.edges:                         # remove as a value from the edges hashtable, O(n+m); can we do better?
+            self.edges[src] = [n for n in self.edges[src] if n != node]
     def addEdge(self, edge):
         src = edge.getSource()
         dest = edge.getDestination()
@@ -85,7 +87,7 @@ class Digraph(object):
     def removeEdge(self, edge):
         src = edge.getSource()
         dest = edge.getDestination()
-        if not(src in list(self.edges.keys()) and dest in self.edges[src]):
+        if not(src in self.edges and dest in self.edges[src]):
             raise ValueError('Edge not in graph')
         self.edges[src].remove(dest)
     def removeUndirectedEdge(self, edge):
@@ -115,7 +117,7 @@ class Digraph(object):
             self.edges = rev
         else:
             return rev
-    def computeSCCs(self):
+    def compute_SCCs(self):
         '''
         NOTE: Kosaraju's 2-pass algorithm requires that nodes be labeled
         1 to n, where n is the number of nodes in the graph.
@@ -157,7 +159,8 @@ class Digraph(object):
                 if current not in explored:
                     explored.add(current)
                     scc[s].append(current)
-                if current not in g_edges or all(i in explored for i in g_edges[current]):
+                if current not in g_edges or \
+                all(i in explored for i in g_edges[current]):
                     nonlocal t
                     t += 1
                     order[t] = current
@@ -206,28 +209,80 @@ class WeightedDigraph(Digraph):
     def __init__(self):
         Digraph.__init__(self)
         self.weights = {}
-
-    def addEdge(self, edge):
+    def addEdge(self, edge):  #edge should be a WeightedEdge
         src = edge.getSource()
         dest = edge.getDestination()
         weight = edge.getWeight()
         if not(src in self.nodes and dest in self.nodes):
             raise ValueError('Node not in graph')
-        self.edges[src].append((dest, weight))
+        self.edges[src].append(dest)
         self.weights[(src, dest)] = weight
-
+    def removeEdge(self, edge): #edge should be a WeightedEdge
+        src = edge.getSource()
+        dest = edge.getDestination()
+        weight = edge.getWeight()
+        if not(src in self.edges and dest in self.edges[src]):
+            raise ValueError('Edge not in graph')
+        self.edges[src].remove(dest)
+        if len(self.weights[(src, dest)]) > 1:
+            self.weights[(src, dest)].pop()
+        else:
+            self.weights.pop((src, dest))
+    def removeNode(self, node):
+        if node not in self.nodes:
+            raise ValueError('Node not in graph')
+        self.nodes.remove(node)                        # remove from set of nodes
+        children = self.edges.pop(node)                # remove as a key from the edges hashtable and store its former children
+        for v in children:
+            self.weights.pop((node, v))
+        for src in self.edges:                         # remove as a value from the edges hashtable, O(n+m); can we do better?
+            self.weights.pop((src, node), None)
+            self.edges[src] = [n for n in self.edges[src] if n != node]
     def getWeight(self, src, dest):
         return self.weights[(src, dest)]
-
-    def childrenOf(self, node):
-        return [e[0] for e in self.edges[node]]  # accessing 0th element because the adjacency list is a list of tuples in the weighted digraph
-
+    def shortest_paths(self, v):
+        '''
+        Computes the shortest path distances from a source vertex to all other
+        vertices using Dijkstra's algorithm.
+        '''
+        processed = {}  # mapping of processed vertices to geodesic distance
+        candidates = {} # mapping of candidate vertices to their dijstra scores; exists for convenience of O(1) lookups
+        def dijkstra_score(src, dest):
+            return processed[src] + self.getWeight(src, dest)
+        # Initialize Dijstra scores
+        for n in self.nodes:
+            if n == v:
+                processed[n] = 0
+                for dest in self.edges[n]:
+                    score = dijkstra_score(n, dest)
+                    if dest not in candidates or score < candidates[dest]:
+                        candidates[dest] = score
+            else:
+                if n not in candidates:
+                    candidates[n] = float('inf')
+        # heapify node/score tuples, provide comparison key
+        unprocessed = MinHeap(list(candidates.items()), lambda x:x[1])
+        # compute shortest paths
+        while not unprocessed.is_empty():
+            n,s = unprocessed.extract_min()
+            processed[n] = s
+            candidates.pop(n)
+            for dest in self.edges[n]:
+                if dest in candidates:
+                    unprocessed.delete((dest, candidates[dest]))
+                    score = dijkstra_score(n, dest)
+                    best = min(candidates[dest], score)
+                    candidates[dest] = best
+                    unprocessed.insert((dest, best))
+        return processed
     def __str__(self):
         result = ''
-        for node in self.edges:
-            for e in self.edges[node]:
-                result = '{0}{1}->{2} ({3})\n'.format(result, node, e[0], e[1])
+        for src in self.edges:
+            for dest in self.edges[src]:
+                w = self.weights[(src, dest)]
+                result = '{0}{1}->{2} ({3})\n'.format(result, src, dest, w)
         return result[:-1]
+
 
 class Graph(Digraph):
     '''
@@ -239,3 +294,10 @@ class Graph(Digraph):
         Digraph.addUndirectedEdge(self, edge)
     def removeEdge(self, edge):
         Digraph.removeUndirectedEdge(self, edge)
+    def removeNode(self, node):
+        if node not in self.nodes:
+            raise ValueError('Node not in graph')
+        self.nodes.remove(node)                        # remove from set of nodes
+        children = self.edges.pop(node)                # remove as a key from the edges hashtable and store its former neighbors
+        for v in children:                             # remove as a value from the edges hashtable
+            self.edges[v] = [n for n in self.edges[v] if n != node]

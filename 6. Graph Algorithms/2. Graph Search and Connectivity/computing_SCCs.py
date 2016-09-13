@@ -44,7 +44,7 @@ def load_graph(filename):
 
 g = load_graph('SCC.txt')
 print('Computing SCCs...')
-scc = g.computeSCCs()      # compute all SCCs using Kosaraju's 2-pass algorithm
+scc = g.compute_SCCs()      # compute all SCCs using Kosaraju's 2-pass algorithm
 scc_sizes = sorted([len(scc[i]) for i in scc.keys()])
 top5 = scc_sizes[len(scc_sizes) - 5:len(scc_sizes)]
 top5                       # print the sizes of the five larges SCCs

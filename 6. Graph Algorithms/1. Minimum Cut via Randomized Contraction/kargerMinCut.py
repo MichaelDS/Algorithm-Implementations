@@ -80,7 +80,7 @@ def rContract(g):
     return g
 
 def load_graph(filename):
-    """
+    '''
     Parses the graph adjacency and constructs an undirected graph
 
     Parameters:
@@ -98,7 +98,7 @@ def load_graph(filename):
 
     Returns:
         a directed graph based on the adjacency list.
-    """
+    '''
 
     print("Loading graph from file...")
 
