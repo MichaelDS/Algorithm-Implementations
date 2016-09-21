@@ -1,3 +1,4 @@
+#TODO: Use lists and return iterator for Dijkstra
 # A set of data structures to represent graphs
 
 from queue import Queue
@@ -21,7 +22,6 @@ class Node(object):
     def __hash__(self):
         # Override the default hash method; simplifies use of dictionary
         return self.name.__hash__()
-
 
 class Edge(object):
     def __init__(self, src, dest):  # src and dest should be nodes
@@ -47,6 +47,22 @@ class WeightedEdge(Edge):
     def __str__(self):
         return '{0}->{1} ({2})'.format(self.src, self.dest, self.weight)
 
+class PathFinder(object):
+    '''
+    Produces generators that can be used to extract shortest paths from lists
+    of edges sorted in order of discovery by shortest path algorithms.
+    '''
+    def __init__(self, paths):
+        self.paths = paths
+    def path_to(self, dest):
+        geodesic = []
+        target = Node(dest)
+        for i in range(len(self.paths)-1, -1, -1):
+            if self.paths[i].getDestination() == target:
+                geodesic.append(self.paths[i])
+                target = self.paths[i].getSource()
+        for e in reversed(geodesic):
+            yield e
 
 class Digraph(object):
     '''
@@ -246,10 +262,11 @@ class WeightedDigraph(Digraph):
         vertices using Dijkstra's algorithm.
         '''
         processed = {}  # mapping of processed vertices to geodesic distance
-        candidates = {} # mapping of candidate vertices to their dijstra scores; exists for convenience of O(1) lookups
+        candidates = {} # mapping of candidate vertices to their Dijkstra scores; exists for convenience of O(1) lookups
+        trace = []      # stores edges in order of processing; used to extract shortest paths
         def dijkstra_score(src, dest):
             return processed[src] + self.getWeight(src, dest)
-        # Initialize Dijstra scores
+        # Initialize Dijkstra scores
         for n in self.nodes:
             if n == v:
                 processed[n] = 0
@@ -267,6 +284,11 @@ class WeightedDigraph(Digraph):
             n,s = unprocessed.extract_min()
             processed[n] = s
             candidates.pop(n)
+            if len(trace) == 0:
+                trace.append(Edge(v, n)) # Investigate KeyError when using WeightedEdge
+            else:
+                src = trace[-1].getDestination()
+                trace.append(Edge(src, n)) # Investigate KeyError when using WeightedEdge
             for dest in self.edges[n]:
                 if dest in candidates:
                     unprocessed.delete((dest, candidates[dest]))
@@ -274,7 +296,7 @@ class WeightedDigraph(Digraph):
                     best = min(candidates[dest], score)
                     candidates[dest] = best
                     unprocessed.insert((dest, best))
-        return processed
+        return (processed, PathFinder(trace))
     def __str__(self):
         result = ''
         for src in self.edges:
