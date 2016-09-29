@@ -54,7 +54,7 @@ class HashTable(MutableMapping):
         elif isinstance(x, tuple):
             res = 0x345678
             for item in x:
-                res = (1000003 * res) ^ _hash(item, m)
+                res = (1000003 * res) ^ self._hash(item, m)
             res = res ^ len(x)
             return res % m
         else:

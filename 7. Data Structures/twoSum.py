@@ -61,3 +61,5 @@ def two_sum_range2(data = data, lower = -10000, upper = 10000):
             left += 1
             right -= 1
     return hits
+
+hits = two_sum_range(data)
