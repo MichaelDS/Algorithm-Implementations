@@ -1,6 +1,6 @@
 
-#TODO: Implement select and rank and try achieving O(logn) time complexity
-#      Use size of left subtree to determine a given node's rank
+#TODO: Use size of left subtree optimize rank and select methods to O(logn)
+
 class TNode(object):
     __slots__ = ('data', 'parent', 'left', 'right', 'color')
     def __init__(self, data = None, parent = None, left = None, right = None,
@@ -12,13 +12,13 @@ class TNode(object):
         assert not color or color == 'RED' or color == 'BLACK', \
         'color must be \'RED\' or \'BLACK\''
         self.color = color
+
     def getData(self):
         return self.data
     def __str__(self):
         return str(self.data)
     def __repr__(self):
         return str(self.data)
-
 
 class BSTree(object):
     '''
@@ -89,6 +89,39 @@ class BSTree(object):
             self._transplant(target, replacement)
             replacement.left = target.left
             replacement.left.parent = replacement
+    def rank(self, x, root = None):
+        '''
+        Returns the rank (1-based) of the value x in the binary search tree.
+        If x is not in the tree, its rank is still returned by computing its
+        ordering within the elements of the tree.
+        '''
+        if not x:
+            return 0
+        def tree_rank(start):
+            if start == self.nil:
+                return 0
+            if self.key(x) == self.key(start.getData()):
+                return self.size(start.left)
+            elif self.key(x) < self.key(start.getData()):
+                return tree_rank(start.left)
+            else:
+                return tree_rank(start.left) + 1 + tree_rank(start.right)
+        if not root:
+            return tree_rank(self.root) + 1
+        else:
+            return tree_rank(root) + 1
+    def select(self, i):
+        '''
+        Returns the ith order element of the tree.
+        '''
+        def tree_select(start, i):
+            if self.rank(start.getData()) == i:
+                return start
+            elif self.rank(start.getData()) > i:
+                return tree_select(start.left, i)
+            else:
+                return tree_select(start.right, i-tree_select(start.left, i)-1)
+        return tree_select(self.root, i)
     def min(self, start = None):
         if not start:
             start = self.root
@@ -125,12 +158,15 @@ class BSTree(object):
                 return 0
             return max(1 + tree_height(x.left), 1 + tree_height(x.right))
         return tree_height(self.root)
-    def size(self):
+    def size(self, root = None):
         def count_nodes(x):
             if x == self.nil:
                 return 0
             return(1 + count_nodes(x.left) + count_nodes(x.right))
-        return count_nodes(self.root)
+        if not root:
+            return count_nodes(self.root)
+        else:
+            return count_nodes(root)
     def _transplant(self, u, v, rb = False):
         '''
         Replaces the subtree rooted at u with the subtree rooted at v.

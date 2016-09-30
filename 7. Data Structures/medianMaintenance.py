@@ -1,4 +1,6 @@
 from heap import MinHeap, MaxHeap
+from binarySearchTrees import RBTree
+from math import ceil
 
 f = open('Median.txt')
 data = f.read().split('\n')
@@ -36,6 +38,19 @@ def median_maintenance(data):
             h_high.insert(median)
             yield median
 
+def tree_median_maintenance(data):
+    rbt = RBTree()
+    for k in data:
+        rbt.insert(k)
+        yield rbt.select(ceil(rbt.size()/2))
+
+
 g = median_maintenance(data)
 m = [k for k in g]
 sum(m) % 10000
+
+# The select function for binary search trees is implemented recursively;
+# fails due to lack of tail recursion
+# g2 = tree_median_maintenance(data)
+# m2 = [k for k in g2]
+# sum(m2) % 10000
